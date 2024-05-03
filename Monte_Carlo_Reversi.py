@@ -93,7 +93,6 @@ class Board:
     def do_move(self, move, player):
         self.history.append([x[:] for x in self.board])
         self.move_list.append(move)
-
         if move is None:
             return
         x, y = move
@@ -104,6 +103,7 @@ class Board:
         else:
             self.opponent_token += 1
         self.fields -= {(x, y)}
+
         for dx, dy in self.dirs:
             x, y = x0, y0
             to_beat = []
@@ -202,7 +202,7 @@ class Node:
         self.parent = parent
         self.children = []
         self.visits = 0
-        self.ouer_player = our_player
+        self.our_player = our_player
 
     def expand(self):
         for move in self.board.moves(self.actual_player):
@@ -222,7 +222,7 @@ class Node:
         result = 0
         for _ in range(repetitions):
             new_board = self.board.__copy__()
-            result += new_board.simulate_game(player_move, self.ouer_player)
+            result += new_board.simulate_game(player_move, self.our_player)
         return result
 
     def backpropagation(self, value):
@@ -230,12 +230,6 @@ class Node:
         self.value += value
         if self.parent:
             self.parent.backpropagation(value)
-
-    def print_tree(self):
-        print(self.value, self.visits, end=" ")
-        for child in self.children:
-            child.print_tree()
-        print()
 
     def MCTS(self, C, repetitions, iterations):
         self.expand()
@@ -251,32 +245,10 @@ class Node:
                 node = node.best_child(C)
                 value = node.rollout(repetitions, self.actual_player)
                 node.backpropagation(value)
-
-
         return max(self.children, key=lambda x: x.value/ x.visits if x.visits != 0 else 0)
 
 
-def play_game_with_random_opponent(node):
-    # Zasymuluj grę między Twoim botem a losowym przeciwnikiem
-    board = node.board.__copy__()
-    while not board.terminal():
-        node = Node(board,0,0, 0).MCTS(2, 10, 10)
-        board = node.board.__copy__()
-        board.draw()
-        print("board after MCTS move")
-        if board.terminal():
-            if board.result() > 0:
-                return True
-            else:
-                return False
-        move = board.random_move(1)
-        board.do_move(move, 1)
-        board.draw()
-        print("board after random move")
-    if board.result() > 0:
-        return True
-    else:
-        return False
+
 def play_games(results_queue):
     results = {"Bot 1 wins": 0, "Bot 2 wins": 0, "Draw": 0}
     for i in range(1):  # liczba gier do przeprowadzenia
@@ -287,7 +259,7 @@ def play_games(results_queue):
         while True:
             if player == 0:
                 node = Node(B, 0, 0, 0)  # Ustawienie MCTS jako drugiego gracza
-                node = node.MCTS(2, 10, 30)
+                node = node.MCTS(2, 20, 30)
                 B = node.board.__copy__()
                 print("MCTS")
                 B.draw()
