@@ -112,10 +112,10 @@ class Board:
 
     def h(self):
         bonus = 0
-        bonus += -8 if self.board[0][0] == 1 else 8 if self.board[0][0] == 0 else 0
-        bonus += -8 if self.board[0][7] == 1 else 8 if self.board[0][7] == 0 else 0
-        bonus += -8 if self.board[7][0] == 1 else 8 if self.board[7][0] == 0 else 0
-        bonus += -8 if self.board[7][7] == 1 else 8 if self.board[7][7] == 0 else 0
+        bonus += -7 if self.board[0][0] == 1 else 7 if self.board[0][0] == 0 else 0
+        bonus += -7 if self.board[0][7] == 1 else 7 if self.board[0][7] == 0 else 0
+        bonus += -7 if self.board[7][0] == 1 else 7 if self.board[7][0] == 0 else 0
+        bonus += -7 if self.board[7][7] == 1 else 7 if self.board[7][7] == 0 else 0
         for i in range(1, 7):
             bonus += -2 if self.board[0][i] == 1 else 2 if self.board[0][i] == 0 else 0
             bonus += -2 if self.board[i][0] == 1 else 2 if self.board[i][0] == 0 else 0
@@ -190,7 +190,7 @@ results = {"Bot 1 wins": 0, "Bot 2 wins": 0, "Draw": 0}
 start_time = time.time()
 def play_games(results_queue):
     results = {"Bot 1 wins": 0, "Bot 2 wins": 0, "Draw": 0}
-    for i in range(50):  # liczba gier do przeprowadzenia
+    for i in range(10):  # liczba gier do przeprowadzenia
         player = i % 2
         print(f"Game {i + 1} started...")
 
@@ -198,7 +198,7 @@ def play_games(results_queue):
 
         while True:
             if player == 0:
-                value, move = B.alphabeta_move(player, depth=3, alpha=float('-inf'), beta=float('inf'))
+                value, move = B.alphabeta_move(player, depth=5, alpha=float('-inf'), beta=float('inf'))
                 B.do_move(move, player)
             else:
                 move = B.random_move(player)

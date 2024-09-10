@@ -253,7 +253,7 @@ def play_games(results_queue):
     results = {"Bot 1 wins": 0, "Bot 2 wins": 0, "Draw": 0}
     for i in range(1):  # liczba gier do przeprowadzenia
         print(f"Game {i + 1} started...")
-        player = 0  # Ustawienie MCTS jako drugiego gracza
+        player = 1  # Ustawienie MCTS jako drugiego gracza
         B = Board()
 
         while True:
@@ -265,7 +265,7 @@ def play_games(results_queue):
                 B.draw()
             else:
 
-                value, move = B.alphabeta_move(player, depth=4, alpha=float('-inf'), beta=float('inf'))
+                value, move = B.alphabeta_move(player, depth=5, alpha=float('-inf'), beta=float('inf'))
                 B.do_move(move, player)
                 print("Alphabeta")
                 B.draw()

@@ -13,7 +13,7 @@ class Field:
         self.animal = animal
 
     def __str__(self):
-        return self.animal if not None else self.type
+        return self.animal if self.animal is not None else self.type
 
     def __copy__(self):
         return Field(self.type, self.animal)
@@ -39,7 +39,7 @@ class Field:
     def can_be_placed(self, animal):
         if self.is_empty():
             if self.type == "~":
-                if animal == "R" or animal == "r":
+                if animal == "R" or animal == "r": # skrót do jednego ifa
                     return True
                 else:
                     return False
@@ -84,7 +84,7 @@ class Jungle:
                            "E": (2, 6), "J": (2, 2), "R": (2, 0), "W": (2, 4)}
         self.player_small_figures = {"l": (8, 6), "t": (8, 0), "c": (7, 1), "d": (7, 5),
                            "e": (6, 0), "j": (6, 4), "r": (6, 6), "w": (6, 2)}
-        self.animal_strength = {"R": 1, "C": 2, "D": 3, "W": 4, "J": 5, "T": 6, "L": 7, "E": 8}
+        self.animal_strength = {"R": 1, "C": 2, "D": 3, "W": 4, "J": 5, "T": 6, "L": 7, "E": 8} # przetłumaczenie na słownik bicia
         self.visited = set()
 
     def get_parsed_position(self):
